@@ -1,0 +1,9 @@
+
+multistep_form.multi_step_sample:
+  path: '/multistep-sample'
+  defaults:
+    _form: '\Drupal\multistep_form\Form\MultiStepSample'
+    _title: 'MultiStepSample'
+  requirements:
+    _access: 'TRUE'
+  
