@@ -46,63 +46,77 @@ class MultiStepSample extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    
+    // Step 1
+    if($this->step == 1) {
 
-    //$form = parent::buildForm($form, $form_state);
+      $form['personal_data'] = [
+          '#type' => 'fieldset',
+          '#title' => $this->t('Personal data'),
+      ];
+      $form['personal_data']['first_name'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('First Name'),
+          '#maxlength' => 64,
+          '#size' => 64,
+      ];
+      $form['personal_data']['last_name'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('Last Name'),
+          '#maxlength' => 64,
+          '#size' => 64,
+      ];
+      $form['personal_data']['gender'] = [
+          '#type' => 'radios',
+          '#title' => $this->t('Gender'),
+          '#options' => array('Male' => $this->t('Male'), 'Female' => $this->t('Female')),
+      ];
+    }
 
+    // Step 2
+    if($this->step == 2) {
 
-    $form['personal_data'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Personal data'),
-    ];
-    $form['personal_data']['first_name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('First Name'),
-      '#maxlength' => 64,
-      '#size' => 64,
-    ];
-    $form['personal_data']['last_name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Last Name'),
-      '#maxlength' => 64,
-      '#size' => 64,
-    ];
-    $form['personal_data']['gender'] = [
-      '#type' => 'radios',
-      '#title' => $this->t('Gender'),
-      '#options' => array('Male' => $this->t('Male'), 'Female' => $this->t('Female')),
-    ];
-    $form['address_information'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Address information'),
-    ];
-    $form['address_information']['address'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Address'),
-      '#maxlength' => 64,
-      '#size' => 64,
-    ];
-    $form['address_information']['state'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('State'),
-      '#maxlength' => 64,
-      '#size' => 64,
-    ];
-    $form['address_information']['city'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('City'),
-      '#maxlength' => 64,
-      '#size' => 64,
-    ];
-    $form['address_information']['zipcode'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('ZipCode'),
-      '#maxlength' => 64,
-      '#size' => 64,
-    ];
+      $form['address_information'] = [
+          '#type' => 'fieldset',
+          '#title' => $this->t('Address information'),
+      ];
+      $form['address_information']['address'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('Address'),
+          '#maxlength' => 64,
+          '#size' => 64,
+      ];
+      $form['address_information']['state'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('State'),
+          '#maxlength' => 64,
+          '#size' => 64,
+      ];
+      $form['address_information']['city'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('City'),
+          '#maxlength' => 64,
+          '#size' => 64,
+      ];
+      $form['address_information']['zipcode'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('ZipCode'),
+          '#maxlength' => 64,
+          '#size' => 64,
+      ];
+    }
+
+    //
+    if($this->step < 2) {
+      $button_label = $this->t('Next');
+    }
+    else {
+      $button_label = $this->t('Complete!!');
+    }
 
     $form['submit'] = [
         '#type' => 'submit',
-        '#value' => t('Submit'),
+        '#value' => $button_label,
     ];
 
     return $form;
@@ -119,10 +133,20 @@ class MultiStepSample extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
     // Display result.
-    foreach ($form_state->getValues() as $key => $value) {
-        drupal_set_message($key . ': ' . $value);
+    if($this->step < 2 ) {
+      $form_state->setRebuild();
+      $this->step++;
+      drupal_set_message('Step 1 Completed!!');
     }
+    else {
+      drupal_set_message('Step 2 Completed!!');
+      foreach ($form_state->getValues() as $key => $value) {
+        drupal_set_message($key . ': ' . $value);
+      }
+    }
+
 
   }
 
