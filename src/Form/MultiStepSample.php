@@ -46,7 +46,7 @@ class MultiStepSample extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    
+
     // Step 1
     if($this->step == 1) {
 
